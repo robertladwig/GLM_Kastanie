@@ -11,6 +11,12 @@ the 3.1.9 has worked and created output files
 the 3.1.1 version is not working currently: 
 
 
+=> The runtime is too short and it doesn't create any new output.
+
+=> The output of the `calibration_sim` function can't be right either, since it creates the same RMSE over and over again:
+
+
+
 > GLM3r::run_glm(sim_folder, verbose = T)
 
      Reading configuration from glm3.nml
@@ -41,12 +47,11 @@ Warning in met file, snowice is enabled but Snow column not found!
 
 [1] 0
 
-**Important Note 1:**
-The runtime is too short and it doesn't create any new output.
+here you can see the run stops after 0 seconds
 
-**Important Note 2:**
-The output of the `calibration_sim` function can't be right either, since it creates the same RMSE over and over again:
 
+
+when running the calibrate_sim function:
 
 [1] "RMSE 2.601"
 
