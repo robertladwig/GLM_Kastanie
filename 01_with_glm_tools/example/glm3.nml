@@ -1,0 +1,128 @@
+&glm_setup
+   sim_name = 'Kastanienallee'
+   max_layers = 500
+   min_layer_vol = 0.06
+   min_layer_thick = 0.15
+   max_layer_thick = 0.27
+   density_model = 1
+   non_avg = .false.
+/
+&light
+   light_mode = 0
+   n_bands = 4
+   light_extc = 1, 0.5, 2, 4
+   energy_frac = 0.51, 0.45, 0.035, 0.005
+   Benthic_Imin = 10
+   Kw = 0.72
+/
+&mixing
+   surface_mixing = 1
+   coef_mix_conv = 0.2017936
+   coef_wind_stir = 0.233916
+   coef_mix_shear = 0.2766746
+   coef_mix_turb = 0.2873354
+   coef_mix_KH = 0.5, 0.2
+   coef_mix_hyp = 0.2
+   deep_mixing = 2
+   diff = 0
+/
+&morphometry
+   lake_name = 'TeichohneNamen'
+   latitude = 49.89128
+   longitude = 8.667835
+   crest_elev = 138
+   bsn_len = 96.2
+   bsn_wid = 81
+   bsn_vals = 24
+   H = 126.5, 127, 127.5, 128, 128.5, 129, 129.5, 130, 130.5, 131, 131.5, 132, 132.5, 133, 133.5, 134, 134.5, 135, 135.5, 136, 136.5, 137, 137.5, 138
+   A = 0, 30.823, 273.9774, 532.871, 851.485, 1085.067, 1264.474, 1483.819, 1721.266, 1978.191, 2426.21, 2985.338, 3396.53, 3753.732, 4064.708, 4335.8378, 4595.758, 4877.968, 5140.233, 5388.818, 5703.113, 5788.169, 6103.121, 6418.603
+/
+&time
+   timefmt = 2
+   start = '2020-05-18 12:00:00'
+   stop = '2021-03-01 12:00:00'
+   dt = 3600
+   num_days = 380
+   timezone = 1
+/
+&output
+   out_dir = '.'
+   out_fn = 'output'
+   nsave = 24
+   csv_lake_fname = 'lake'
+   csv_point_fname = 'DT_'
+   csv_point_nlevs = 1
+   csv_point_frombot = .false.
+   csv_point_at = 0.5
+   csv_point_nvars = 1
+   csv_point_vars = 'temp'
+   csv_outlet_allinone = .false.
+   csv_ovrflw_fname = 'overflow'
+/
+&init_profiles
+   lake_depth = 9.72
+   num_depths = 4
+   the_depths = 0.3, 1.5, 5, 8.5
+   the_temps = 7.8, 7.8, 7.3, 7.5
+   the_sals = 0.355, 0.356, 0.441, 0.644
+/
+&meteorology
+   met_sw = .true.
+   lw_type = 'LW_CC'
+   rain_sw = .false.
+   atm_stab = 0
+   catchrain = .false.
+   rad_mode = 0
+   albedo_mode = 1
+   cloud_mode = 4
+   meteo_fl = 'bcs/meteo_hourly.csv'
+   subdaily = .false.
+   wind_factor = 0.6
+   sw_factor = 1.060653
+   lw_factor = 0.95
+   at_factor = 0.95
+   rh_factor = 1.087637
+   rain_factor = 0.9954301
+   cd = 0.001487972
+   ce = 0.00129603849862945, 0.001, 0.0014879716429746
+   ch = 0.001
+   rain_threshold = 0.001
+   runoff_coef = 0
+/
+&bird_model
+   AP = 1013
+   Oz = 0.279
+   WatVap = 1.1
+   AOD500 = 0.033
+   AOD380 = 0.038
+   Albedo = 0.2
+/
+&inflow
+   num_inflows = 1
+   names_of_strms = 'Pegel1'
+   subm_flag = .true.
+   subm_elev = 0
+   strm_hf_angle = 180
+   strmbd_slope = 0.001
+   strmbd_drag = 0.016
+   inflow_factor = 1
+   inflow_fl = 'bcs/inflow1_hourly.csv'
+   inflow_varnum = 2
+   inflow_vars = 'FLOW','TEMP'
+   coef_inf_entrain = 0
+/
+&outflow
+   num_outlet = 1
+   outlet_type = 1
+   flt_off_sw = .false.
+   outl_elvs = 127
+   bsn_len_outl = 6.8
+   bsn_wid_outl = 5.8
+   outflow_fl = 'bcs/outflow_hourly.csv'
+   outflow_factor = 1
+/
+&snowice
+   snow_albedo_factor = 1
+   snow_rho_max = 300
+   snow_rho_min = 50
+/

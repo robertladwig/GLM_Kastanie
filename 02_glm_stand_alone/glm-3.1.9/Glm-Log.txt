@@ -1,0 +1,33 @@
+     
+    -------------------------------------------------------
+    |  General Lake Model (GLM)   Version 3.1.9           |
+    -------------------------------------------------------
+     
+     glm built using MSC version 1916
+
+     Reading configuration from glm3.nml
+
+     nDays= 380; timestep= 3600.000000 (s)
+     NOTE: value for base_elev is no longer used; A[1] is assumed.
+     Maximum lake depth is 11.500000
+     Depth where flow will occur over the crest is 11.500000
+     VolAtCrest= 35495.40535; MaxVol= 35495.40535 (m3)
+     No 'sediment' section, turning off sediment heating
+Warning in met file, snowice is enabled but Snow column not found!
+Could not open "plots.nml"
+Error opening namelist file plots.nml
+Using defaults
+
+     Wall clock start time :  Fri Jun 30 14:34:25 2023
+
+     Simulation begins...
+
+
+     Wall clock finish time : Fri Jun 30 14:34:26 2023
+     Wall clock runtime was 1 seconds : 00:00:01 [hh:mm:ss]
+
+plot 0 : zmin = 2.47e+00 ; zmax = 3.19e+01 (supplied -1.00e+00 ; 3.00e+01) Temperature
+plot 1 : zmin = 1.46e-01 ; zmax = 6.44e-01 (supplied 0.00e+00 ; 6.00e-01) Salinity
+    Model Run Complete
+    -------------------------------------------------------
+
