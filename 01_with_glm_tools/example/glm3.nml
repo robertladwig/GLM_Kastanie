@@ -17,12 +17,12 @@
 /
 &mixing
    surface_mixing = 1
-   coef_mix_conv = 0.2017936
-   coef_wind_stir = 0.233916
-   coef_mix_shear = 0.2766746
-   coef_mix_turb = 0.2873354
-   coef_mix_KH = 0.5, 0.2
-   coef_mix_hyp = 0.2
+   coef_mix_conv = 0.1057192
+   coef_wind_stir = 0.2760109
+   coef_mix_shear = 0.3521776
+   coef_mix_turb = 0.5337515
+   coef_mix_KH = 0.3905015
+   coef_mix_hyp = 0.7879373
    deep_mixing = 2
    diff = 0
 /
@@ -40,13 +40,13 @@
 &time
    timefmt = 2
    start = '2020-05-18 12:00:00'
-   stop = '2021-03-01 12:00:00'
+   stop = '2020-11-25 12:00:00'
    dt = 3600
    num_days = 380
    timezone = 1
 /
 &output
-   out_dir = '.'
+   out_dir = './output/'
    out_fn = 'output'
    nsave = 24
    csv_lake_fname = 'lake'
@@ -77,15 +77,15 @@
    cloud_mode = 4
    meteo_fl = 'bcs/meteo_hourly.csv'
    subdaily = .false.
-   wind_factor = 0.6
-   sw_factor = 1.060653
-   lw_factor = 0.95
-   at_factor = 0.95
-   rh_factor = 1.087637
-   rain_factor = 0.9954301
-   cd = 0.001487972
-   ce = 0.00129603849862945, 0.001, 0.0014879716429746
-   ch = 0.001
+   wind_factor = 1.1
+   sw_factor = 1.094111
+   lw_factor = 0.9588051
+   at_factor = 1.022636
+   rh_factor = 1.092805
+   rain_factor = 0.9235995
+   cd = 0.002986364
+   ce = 0.002249253
+   ch = 0.002636581
    rain_threshold = 0.001
    runoff_coef = 0
 /

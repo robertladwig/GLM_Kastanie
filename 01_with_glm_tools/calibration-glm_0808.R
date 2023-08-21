@@ -100,7 +100,7 @@ verbose = TRUE
 method = 'CMA-ES'    # optimization method, choose either `CMA-ES` or `Nelder-Mead`
 metric = 'RMSE'      # objective function to be minimized, here the root-mean square error
 target.fit = 2.0     # refers to a target fit of 2.0 degrees Celsius (stops when RMSE is below that)
-target.iter = 20    # refers to a maximum run of 20 calibration iterations (stops after that many runs)
+target.iter = 1000    # refers to a maximum run of 20 calibration iterations (stops after that many runs)
 plotting = TRUE      # if TRUE, script will automatically save the contour plots
 output = out_file    # path of the output file
 field_file = field_data # path of the field data
@@ -114,8 +114,23 @@ calibrate_sim(var = 'temp', path = getwd(),
               glmcmd = NULL, first.attempt = TRUE, 
               period = period, 
               scaling = TRUE, method = 'CMA-ES', metric = 'RMSE', 
-              target.fit = 2.0, target.iter = 20, 
+              target.fit = target.fit, target.iter = target.iter, 
               plotting = TRUE, 
               output = output, 
               verbose = TRUE,
               conversion.factor = 1)
+
+
+field <- read_field_obs(field_file, var_name='temp')
+field %>% filter(Depth == 8.5) %>%
+  ggplot() + geom_line(aes(DateTime, temp))
+
+data = resample_to_field(nc_file = 'output/output.nc', field_file = field_file)
+sqrt(sum((data$Observed_temp - data$Modeled_temp)^2, na.rm = T)/(nrow(data)))
+
+temp_rmse <- compare_to_field(nc_file = out_file, 
+                              field_file = field_data,
+                              metric = 'water.temperature', 
+                              as_value = FALSE, 
+                              precision= 'hours')
+print(temp_rmse)

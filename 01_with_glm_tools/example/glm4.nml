@@ -1,0 +1,348 @@
+!-------------------------------------------------------------------------------
+! general model setup
+!-------------------------------------------------------------------------------
+!
+! sim_name         [string]  title of simulation
+! max_layers       [integer] maximum number of layers
+! min_layer_vol    [real]    minimum layer volume (m3 * 1000)
+! min_layer_thick  [real]    minimum layer thickness (m)
+! max_layer_thick  [real]    maximum layer thickness (m)
+! Kw               [real]    background light attenuation (m**-1)
+! coef_mix_conv    [real]    mixing efficiency - convective overturn
+! coef_wind_stir   [real]    mixing efficiency - wind stirring
+! coef_mix_turb    [real]    mixing efficiency - unsteady turbulence effects
+! coef_mix_shear   [real]    mixing efficiency - shear production
+! coef_mix_KH      [real]    mixing efficiency - hypolimnetic Kelvin-Helmholtz turbulent billows
+! coef_mix_hyp     [real]    mixing efficiency - hypolimnetic turbulence
+! deep_mixing      [bool]    flag to disable deep-mixing
+!-------------------------------------------------------------------------------
+
+&glm_setup
+   sim_name = 'Kastanienallee'
+   max_layers = 500
+   min_layer_vol = 0.06
+   min_layer_thick = 0.15
+   max_layer_thick = 0.27
+   density_model = 1
+   non_avg = .false.
+/
+
+&light
+   light_mode = 0
+   n_bands = 4
+   light_extc = 1, 0.5, 2, 4
+   energy_frac = 0.51, 0.45, 0.035, 0.005
+   Benthic_Imin = 10
+!--Secchi-Sichttiefe:
+  Kw = 0.72
+/
+&mixing
+   surface_mixing = 1
+   coef_mix_conv = 0.063
+   coef_wind_stir = 0.203
+   coef_mix_shear = 0.123
+   coef_mix_turb = 0.314
+   coef_mix_KH = 0.399
+   coef_mix_hyp = 0.25
+   deep_mixing = 2
+   diff = 0
+/
+
+!-------------------------------------------------------------------------------
+! lake details
+!-------------------------------------------------------------------------------
+!
+! name             [string] name of the lake
+! latitude         [float, minimum = -90, maximum = 90, unit = deg North]
+! longitude        [float, minimum = -360, maximum = 360, unit = deg East]
+! base_elev        [float] base elevation (m)
+! crest_elev       [float] crest elevation (m)
+! bsn_len          [float] basin length at crest (m)
+! bsn_wid          [float] basin width at crest (m)
+! bsn_vals         [integer] number of depth points on height-area relationship
+! H                [float] elevations (m)   (comma separated list, len=bsn_vals)
+! A                [float] area (m2 * 1000) (comma separated list, len=bsn_vals)
+!
+!------------------------------------------------------------------------------
+
+&morphometry
+  lake_name = 'Teich ohne Namen'
+   latitude = 49.8912771158111
+   longitude = 8.667835218025933
+   !base_elev  = 126.5
+   crest_elev = 138.0
+   bsn_len = 96.2
+   bsn_wid = 81.0
+   bsn_vals = 24
+   H =  126.5, 127.0, 127.5, 128.0, 128.5,
+	129.0, 129.5, 130.0, 130.5, 131.0,
+	131.5, 132.0, 132.5, 133.0, 133.5,
+	134.0, 134.5, 135.0, 135.5, 136.0,
+	136.5, 137.0, 137.5, 138.0
+   A = 	0.0, 30.823, 273.9774, 532.871, 851.485,
+       	1085.067, 1264.474, 1483.819, 1721.266, 1978.191,
+	2426.210, 2985.338, 3396.530, 3753.732, 4064.708,
+	4335.8378, 4595.758, 4877.968, 5140.233, 5388.818,
+	5703.113, 5788.169, 6103.121, 6418.603
+/
+
+!-------------------------------------------------------------------------------
+! duration of run
+!-------------------------------------------------------------------------------
+!
+! timefmt [integer]
+!           method to specify start and duration of model run
+!           1: duration computed from number of time steps, MaxN (bogus start
+!             date used) [no longer implemented!!]
+!           2: duration computed from given start and stop dates (number of time
+!             steps MaxN computed)
+!           3: duration computed from number of time steps, MaxN (start date as
+!             specified, stop date computed)
+! start   [string, format = "yyyy-mm-dd hh:mm:ss"] nominal start date
+!           This variable is used only if timefmt != 1
+! stop    [string, format = "yyyy-mm-dd hh:mm:ss"] nominal stop date
+!           This variable is used only if timefmt = 2
+! dt        [float, minimum = 0.001, maximum = 86400, unit = s] Time step for integration
+! numb_days [number of days to run the simulation ] This variable is used only if timefmt != 2
+!
+!-------------------------------------------------------------------------------
+
+&time
+   timefmt = 2
+   start = '2020-05-18 12:00:00'
+   stop = '2021-03-01 12:00:00'
+   dt = 3600
+   num_days = 380
+   timezone = 1
+/
+
+!-------------------------------------------------------------------------------
+! format for output and filename(s)
+!-------------------------------------------------------------------------------
+!
+! out_dir           [string] path to output directory (set permissions)
+! out_fn            [string] name of output netcdf file
+! nsave             [integer, minimum = 1, maximum = 86400] save results every 'nsave' timesteps
+! csv_lake_fname    [string] name of lake.csv lake simulation daily summary information
+! csv_point_nlevs   [integer] number of depths at which to dump a csv time-series file
+! csv_point_at      [real] height from bottom for point csv file(s) (comma separated list)
+! csv_point_fname   [string] name of csv output file(s) (comma separated list)
+! csv_point_nvars   [integer] number of variables to output into csv
+! csv_point_vars    [string] list of names of variables to output, - order IS important
+! csv_outlet_allinone [bool] put all outflow data into the same csv file
+! csv_outlet_fname  [string] name of csv output file(s) (comma separated list)
+! csv_outlet_nvars  [integer] number of variables to output into outlet csv
+! csv_outlet_vars   [string] list of names of variables to output
+! csv_ovrflw_fname  [string] name of csv file to record amount and quality of overflow
+!
+!-------------------------------------------------------------------------------
+
+&output
+   out_dir = './output/'
+   out_fn = 'output'
+   nsave = 24
+  !-- General summary file
+   csv_lake_fname = 'lake'
+  !-- Depth specific outputs
+   csv_point_fname = 'DT_'
+   csv_point_nlevs = 1
+   csv_point_frombot = .false.
+  ! csv_point_at = 0.5, 2.5, 4.5, 6.5, 8.5
+   csv_point_at = 0.5
+   csv_point_nvars = 1
+   csv_point_vars = 'temp'
+  !-- Combined outlet file & overflow
+   csv_outlet_allinone = .false.
+   !csv_outlet_fname = 'outlet_'
+   !csv_outlet_nvars = 3
+   !csv_outlet_vars = 'flow','temp'
+   csv_ovrflw_fname = 'overflow'
+/
+
+!-------------------------------------------------------------------------------
+! initial condition profiles
+!-------------------------------------------------------------------------------
+!
+!   lake_depth     [float]   initial lake depth (m)
+!   num_depths     [integer] number of depths provided for initial profiles
+!   the_depths     [float]   the depths of the initial profile points (m)
+!   the_temps      [float]   the temperature of the initial profile points (C)
+!   the_sals       [float]   the salinity of the initial profile points (psu)
+!   num_wq_vars    [integer] number of non GLM (ie FABM) vars to be initialised
+!   wq_names       [string]  names of non GLM (ie FABM) vars to be initialised
+!   wq_init_vals   [float]   array of FABM vars (rows = vars; cols = depths)
+!
+!-------------------------------------------------------------------------------
+
+&init_profiles
+   lake_depth = 9.72
+   num_depths = 4
+   the_depths = 0.3, 1.5, 5.0, 8.5
+   the_temps = 7.8, 7.8, 7.3, 7.5
+   the_sals = 0.355, 0.356, 0.441, 0.644
+/
+
+!-------------------------------------------------------------------------------
+! meteorology
+!-------------------------------------------------------------------------------
+!
+!   met_sw         [bool]   switch to include surface meteorological forcing
+!   lw_type        [string] type of longwave data supplied (LW_IN/LW_CC/LW_NET)
+!   rain_sw        [bool]   include rainfall nutrient composition
+!   atm_stab       [bool]   account for non-neutral atmospheric stability
+!   catchrain      [bool]   flag that enables runoff from exposed banks of lake area
+!   rad_mode       [integer] short and long wave radation model configuration (see manual)
+!   albedo_mode    [integer] shortwave albedo calculation method
+!   cloud_mode     [integer] atmospheric emmisivity calculation method
+!
+!   subdaily       [bool]   .true. if met data is provided at the model (sub-daily) time-step
+!   meteo_fl       [string] name of file with meteorology input data
+!   wind_factor    [float]  wind multiplication factor (-)
+!   rain_factor    [float]  wind multiplication factor (-)
+!   sw_factor      [float]  wind multiplication factor (-)
+!   lw_factor      [float]  wind multiplication factor (-)
+!   at_factor      [float]  wind multiplication factor (-)
+!   rh_factor      [float]  wind multiplication factor (-)
+!
+!   ce             [float]  bulk aerodynamic coefficient for latent heat transfer
+!   ch             [float]  bulk aerodynamic coefficient for sensible heat transfer
+!   cd             [float]  bulk aerodynamic coefficient for transfer of momentum
+!   rain_threshold [float]  rainfall amount (m) required before runoff from exposed banks
+!   runoff_coef    [float]  conversion of rainfall to runoff in exposed lake banks
+!
+!-------------------------------------------------------------------------------
+
+&meteorology
+   met_sw = .true.
+   lw_type = 'LW_CC'
+   rain_sw = .false.
+   atm_stab = 0
+   catchrain = .false.
+   rad_mode = 0
+   albedo_mode = 1
+   cloud_mode = 4
+   meteo_fl = 'bcs/meteo_hourly.csv'
+   subdaily = .false.
+   wind_factor = 0.99
+   sw_factor = 0.99
+   lw_factor = 1
+   at_factor = 1
+   rh_factor = 1
+   rain_factor = 0.9
+   cd = 0.0015
+   ce = 0.0020
+   ch = 0.0010
+   rain_threshold = 0.001
+   runoff_coef = 0.0
+   !time_fmt = 'YYYY-MM-DD'
+/
+
+!-------------------------------------------------------------------------------
+! bird_model
+!-------------------------------------------------------------------------------
+!
+!   AP = 973           Atmospheric Pressure in milibars
+!   Oz = 0.279         Ozone concentration in atm-cm
+!   WatVap = 1.1       Total Precipitable water vapor in atm-cm
+!   AOD500 = 0.033     Dimensionless Aerosol Optical Depth at wavelength 500 nm
+!   AOD380 = 0.038     Dimensionless Aerosol Optical Depth at wavelength 380 nm
+!   Albedo = 0.2       Default Albedo value
+!
+!-------------------------------------------------------------------------------
+
+&bird_model
+   AP = 1013
+   Oz = 0.279
+   WatVap = 1.1
+   AOD500 = 0.033
+   AOD380 = 0.038
+   Albedo = 0.2
+/
+
+!-------------------------------------------------------------------------------
+! inflows
+!-------------------------------------------------------------------------------
+!
+!  num_inflows       [integer]   number of inflowing streams (0+)
+!  subm_flag         [bool]      flag is true if inflow is submerged (non-plunging)
+!  names_of_strms    [string]    names of streams (comma separated list)
+!  strm_hf_angle     [float]     stream half angle (degrees)
+!  strmbd_slope      [float]     streambed slope (degrees)
+!  strmbd_drag       [float]     streambed drag coefficient (-)
+!  inflow_factor     [float]     inflow flow rate multiplier (-)
+!  inflow_fl         [string]    inflow data filename(s) (comma separated list)
+!  inflow_varnum     [integer]   number of columns (excluding date) to be read
+!  inflow_vars       [string]    variable names of inflow file columns
+!                                This should be a comma separated list, and must
+!                                include FLOW, SALT & TEMP (for GLM), and
+!                                optionally can include FABM var names.
+! coef_inf_entrain   [real]      entrainment coefficient for inflows
+!
+!------------------------------------------------------------------------------
+
+&inflow
+   num_inflows = 1
+   names_of_strms = 'Pegel1'
+   subm_flag = .true.
+   subm_elev = 0
+   strm_hf_angle = 180
+   strmbd_slope = 0.001
+   strmbd_drag = 0.016
+   inflow_factor = 1
+   inflow_fl = 'bcs/inflow1_hourly.csv'
+   inflow_varnum = 2
+   inflow_vars = 'FLOW','TEMP'
+   coef_inf_entrain = 0
+   !time_fmt = 'YYYY-MM-DD'
+/
+
+!-------------------------------------------------------------------------------
+! outflows
+!-------------------------------------------------------------------------------
+!
+!  num_outlet      [integer]  no. of outlets
+!  flt_off_sw      [bool]     floating offtake switches
+!  outl_elvs       [float]    outlet elevations (comma separated list)
+!  bsn_len_outl    [float]    basin length at outlets (m)
+!  bsn_wid_outl    [float]    basin width at outlets (m)
+!  outflow_fl      [string]   outflow data file
+!  outflow_factor  [float]    outflow flow rate multiplier (-)
+!  seepage         [bool]     do seepage processing [default is off - ie no seepage]
+!  seepage_rate    [float]    seepage rate of water (m/day) from bottom layer
+!
+!-------------------------------------------------------------------------------
+
+&outflow
+   num_outlet = 1
+   outlet_type = 1
+   flt_off_sw = .false.
+   outl_elvs = 127
+   bsn_len_outl = 6.8
+   bsn_wid_outl = 5.8
+   outflow_fl = 'bcs/outflow_hourly.csv'
+   outflow_factor = 1
+   !time_fmt = 'YYYY-MM-DD'
+/
+&snowice
+   snow_albedo_factor = 1
+   snow_rho_max = 300
+   snow_rho_min = 50
+/
+
+!-------------------------------------------------------------------------------
+! Sediment
+!-------------------------------------------------------------------------------
+!
+!  sed_heat_Ksoil       [float]    heat conductivity of soil–sediment (varies from 0.25 for organic soil to 2.9 for inorganic particles)
+!
+!-------------------------------------------------------------------------------
+
+!&sediment
+!   benthic_mode = 1
+!   n_zones = 1
+!   zone_heights = 10
+!   sed_temp_mean = 12.77
+!   sed_temp_amplitude = 2.7
+!   sed_temp_peak_doy = 120
+!   sed_heat_Ksoil = 0.0
+!/
